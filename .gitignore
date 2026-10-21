@@ -4,3 +4,4 @@ public/mediapipe/
 public/models/
 .evidence/
 .vercel/
+.env*
