@@ -115,6 +115,7 @@ export interface PulseShape {
   ibi: number; // seconds, median of accepted beats
   beats: number; // accepted beats
   candidates: number; // beats before template gating
+  feet: number[]; // seconds, every detected foot in time order, before interval gating
 }
 
 /**
@@ -210,7 +211,7 @@ function shapeWithSign(wideIn: Float64Array, narrowIn: Float64Array, sign: 1 | -
   }
   const width = (right - left) / span;
   if (!Number.isFinite(width)) return null;
-  return { riseFrac: rise, widthFrac: width, ibi: median(kept.map((b) => b.ibi)), beats: kept.length, candidates: beats.length };
+  return { riseFrac: rise, widthFrac: width, ibi: median(kept.map((b) => b.ibi)), beats: kept.length, candidates: beats.length, feet: feet.map((f) => f / fs) };
 }
 
 function modelSys(f: BpFeatures): number {
