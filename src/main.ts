@@ -306,22 +306,22 @@ function drawOverlay(rois: Rect[], face: boolean, tracking: boolean, level: numb
   }
   const ctx = overlay.getContext("2d")!;
   ctx.clearRect(0, 0, w, h);
-  ctx.lineWidth = Math.max(2, w / 200);
+  // Canvas pixels per CSS pixel under the cover crop, so line widths match the design.
+  const px = 1 / Math.max(overlay.clientWidth / w, overlay.clientHeight / h) || 1;
+  ctx.lineWidth = 2 * px;
   ctx.strokeStyle = face ? ACCENT : GUIDE_IDLE;
-  ctx.setLineDash([w / 60, w / 80]);
   // In guide mode the oval keeps its size: the sampler reads fixed regions inside it.
   const still = reducedMotion.matches;
   const scale = tracking && !still ? 1 + 0.04 * (2 * level - 1) : 1;
   ctx.shadowColor = ctx.strokeStyle;
-  ctx.shadowBlur = still ? 0 : w * (0.005 + 0.03 * level);
+  ctx.shadowBlur = px * (still ? 20 : 6 + 34 * level);
   ctx.beginPath();
   ctx.ellipse(w / 2, h * 0.47, Math.min(w, h) * 0.3 * scale, h * 0.4 * scale, 0, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.setLineDash([]);
   if (!still) {
     // Rings ripple out of the oval on inhale and fold back on exhale. They never
     // resize the oval itself, so guide mode keeps them too.
-    ctx.lineWidth = Math.max(1, w / 400);
+    ctx.lineWidth = px;
     [0.55, 0.32, 0.16].forEach((alpha, i) => {
       const k = scale * (1 + 0.1 * (i + 1) * level);
       ctx.globalAlpha = alpha * level;
