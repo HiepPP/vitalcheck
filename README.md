@@ -32,7 +32,8 @@ Everything runs on the device. Video frames are never uploaded or stored.
    own signal quality and combined when that beats the whole-face signal.
 
 The scan has a 2-second settle phase, then 60 seconds of measurement. Losing the face for
-more than 1.5 seconds restarts it.
+more than 1.5 seconds restarts it. During the scan the face oval paces breathing, 4 s in and
+6 s out. Slow paced breathing can make the heart rate swing a little within each breath.
 
 ## Blood pressure (experimental)
 

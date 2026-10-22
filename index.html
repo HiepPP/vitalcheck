@@ -21,7 +21,7 @@
           <div class="cell"><dt class="k">Duration</dt><dd>60 s</dd></div>
           <div class="cell"><dt class="k">Light</dt><dd>Even, from the front</dd></div>
           <div class="cell"><dt class="k">Posture</dt><dd>Still, face in oval</dd></div>
-          <div class="cell"><dt class="k">Voice</dt><dd>Silent, breathe normally</dd></div>
+          <div class="cell"><dt class="k">Voice</dt><dd>Silent, breathe with the oval</dd></div>
         </dl>
         <button id="start" class="go"><span>Start measurement</span><span aria-hidden="true">&rarr;</span></button>
         <p id="camera-error" class="error" role="alert" hidden></p>
@@ -34,6 +34,7 @@
           <video id="video" autoplay muted playsinline></video>
           <canvas id="overlay"></canvas>
           <div class="hud"><span class="rec"><span class="dot"></span>Live</span></div>
+          <div id="breath" class="breath">Breathe in</div>
           <span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span>
         </div>
         <div class="read">

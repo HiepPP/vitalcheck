@@ -3,6 +3,7 @@ import { analyze, bandpass, fps, HR_BAND, liveEstimate, pos, std, type PulseResu
 import { loadLandmarker, onVideoFrame, openCamera, stopCamera, type CameraError } from "./camera";
 import { FaceSampler, type Rect } from "./sampler";
 import { estimateBloodPressure, type BpFeatures } from "./bp";
+import { breathAt, type Breath } from "./breath";
 import { clearCalibration, loadCalibration, makeCalibration, saveCalibration } from "./calibration";
 
 const MEASURE_S = 60;
@@ -28,6 +29,8 @@ const video = $<HTMLVideoElement>("video");
 const overlay = $<HTMLCanvasElement>("overlay");
 const ACCENT = getComputedStyle(document.documentElement).getPropertyValue("--acc").trim();
 const GUIDE_IDLE = "#8c919a";
+const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const BREATH_LABEL = { in: "Breathe in", out: "Breathe out" } as const;
 
 function spans(parent: HTMLElement, n: number): HTMLElement[] {
   parent.replaceChildren(...Array.from({ length: n }, () => document.createElement("span")));
@@ -100,6 +103,7 @@ async function start() {
   setStatus("Starting camera and face tracking ...");
   setProgress(0);
   setLiveBpm(null);
+  $("breath").textContent = BREATH_LABEL.in;
   waveBars.forEach((el) => (el.style.height = ""));
   $("remaining").textContent = "";
   try {
@@ -131,10 +135,19 @@ function run(sampler: FaceSampler) {
   let lastLiveAt = 0;
   let lastWaveAt = 0;
   let notice: { text: string; until: number } | null = null;
+  // The pacer clock starts on the first frame and ignores face-lost restarts.
+  let breathStart = -1;
+  let breathPhase: Breath["phase"] | null = null;
 
   stopFrames = onVideoFrame(video, (t) => {
     const read = sampler.read(t);
-    drawOverlay(read.rois, read.face, sampler.tracking);
+    if (breathStart < 0) breathStart = t;
+    const breath = breathAt(t - breathStart);
+    if (breath.phase !== breathPhase) {
+      breathPhase = breath.phase;
+      $("breath").textContent = BREATH_LABEL[breath.phase];
+    }
+    drawOverlay(read.rois, read.face, sampler.tracking, breath.level);
     if (debug) {
       $("debug").hidden = false;
       $("debug").textContent = [
@@ -216,7 +229,7 @@ function run(sampler: FaceSampler) {
   });
 }
 
-function drawOverlay(rois: Rect[], face: boolean, tracking: boolean) {
+function drawOverlay(rois: Rect[], face: boolean, tracking: boolean, level: number) {
   const w = video.videoWidth;
   const h = video.videoHeight;
   if (!w) return;
@@ -229,10 +242,16 @@ function drawOverlay(rois: Rect[], face: boolean, tracking: boolean) {
   ctx.lineWidth = Math.max(2, w / 200);
   ctx.strokeStyle = face ? ACCENT : GUIDE_IDLE;
   ctx.setLineDash([w / 60, w / 80]);
+  // In guide mode the oval keeps its size: the sampler reads fixed regions inside it.
+  const still = reducedMotion.matches;
+  const scale = tracking && !still ? 1 + 0.04 * (2 * level - 1) : 1;
+  ctx.shadowColor = ctx.strokeStyle;
+  ctx.shadowBlur = still ? 0 : w * (0.005 + 0.03 * level);
   ctx.beginPath();
-  ctx.ellipse(w / 2, h * 0.47, Math.min(w, h) * 0.3, h * 0.4, 0, 0, Math.PI * 2);
+  ctx.ellipse(w / 2, h * 0.47, Math.min(w, h) * 0.3 * scale, h * 0.4 * scale, 0, 0, Math.PI * 2);
   ctx.stroke();
   ctx.setLineDash([]);
+  ctx.shadowBlur = 0;
   if (!face && tracking) return;
   ctx.fillStyle = `${ACCENT}26`;
   ctx.strokeStyle = ACCENT;

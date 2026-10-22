@@ -184,6 +184,17 @@ dd {
     visibility: hidden;
   }
 }
+.breath {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 500 11px var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
 .br {
   position: absolute;
   width: 22px;
