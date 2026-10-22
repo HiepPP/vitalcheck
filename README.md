@@ -52,6 +52,27 @@ features and turns them into an estimate:
 
 Neither mode has been validated against real measurements.
 
+## Heart rate variability and breathing (experimental)
+
+The app measures heart rate variability (HRV) from the beat feet of the whole-face pulse
+signal. The face oval paces breathing at 6 per minute for the whole scan. So HRV is measured
+during guided breathing and is not comparable with resting values.
+
+- **Gates:** signal quality of at least 6 dB and a measured frame rate of at least 25 fps.
+  Below 25 fps, foot timing error is larger than the beat-to-beat change.
+- **Clean beats:** a beat interval (IBI) is clean when it is within 20% of the median of the
+  11 IBIs around it. HRV needs at least 40 clean IBIs, and at least 80% of all IBIs must be
+  clean.
+- **RMSSD:** root mean square of the differences between neighbouring clean IBIs. Pairs with
+  an unclean IBI are skipped.
+- **SDNN:** standard deviation of all clean IBIs.
+- **Range:** RMSSD above 200 ms or SDNN above 250 ms is withheld, not clamped.
+- **Breathing rate:** the strongest peak of the IBI series spectrum between 3 and 30 breaths
+  per minute. It only checks the guide: the user followed it when the rate is within 1 per
+  minute of 6. It is not a natural breathing rate.
+
+HRV and the breathing rate have not been validated against real measurements.
+
 ## Run locally
 
 Requires Node.js 22.12 or newer.
@@ -86,6 +107,7 @@ processing, not accuracy on real people.
 | `src/dsp.ts` | Resampling, POS, filters, spectrum, heart rate |
 | `src/sampler.ts` | Face regions, skin sampling per frame |
 | `src/bp.ts` | Pulse shape and blood-pressure estimate |
+| `src/hrv.ts` | HRV (RMSSD, SDNN) and paced breathing check |
 | `src/calibration.ts` | Cuff calibration storage |
 
 ## Credits
