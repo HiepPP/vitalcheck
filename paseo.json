@@ -1,0 +1,14 @@
+{
+  "worktree": {
+    "setup": "npm ci"
+  },
+  "scripts": {
+    "dev": {
+      "type": "service",
+      "command": "npm run assets && portless proxy start --port 1355 --no-tls >/dev/null && exec portless vitalcheck --app-port \"$PASEO_PORT\" vite"
+    },
+    "test": {
+      "command": "npm test"
+    }
+  }
+}
