@@ -5,6 +5,7 @@
 - Avoid drawing the measured POS signal as the live wave, or calling the trace an ECG, while the owner wants a monitor-style beat at the live BPM. Reason: [ADR-0001](watchtower/decisions/ADR-0001-stylised-beat-trace-over-measured-signal.md).
 - Avoid an ease-in-out breath curve while the oval swing stays small (+/-4%). Reason: [ADR-0002](watchtower/decisions/ADR-0002-near-linear-breath-curve-over-ease-in-out.md).
 - Avoid 5/5 or 3/3 breathing rhythms while calm is the pacer goal. Reason: [ADR-0003](watchtower/decisions/ADR-0003-four-in-six-out-breathing-rhythm.md).
+- Avoid presenting the scan's breathing rate as a natural rate, or HRV as a resting value, while the pacer runs the whole scan. Reason: [ADR-0004](watchtower/decisions/ADR-0004-paced-hrv-over-free-breathing.md).
 
 ## Learnings
 
