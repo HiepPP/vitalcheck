@@ -117,6 +117,17 @@ describe("hrvFromFeet", () => {
     expect(hrvFromFeet(noisy).kind).toBe("withheld");
   });
 
+  it("withholds at 75% clean intervals even with 40 or more of them", () => {
+    const { feet } = rsaWave({ bpm: 70, rsa: 0.08, breathHz: 0.1 });
+    // Dropping every 5th foot merges 1 in 4 intervals into a long one: about 75% clean.
+    const every5 = feet.filter((_, i) => i % 5 !== 4);
+    const clean = every5.length - 1 - Math.floor(feet.length / 5);
+    expect(clean).toBeGreaterThanOrEqual(40);
+    expect(hrvFromFeet(every5)).toEqual({ kind: "withheld", reason: "Too few clean heartbeats for HRV" });
+    // Dropping every 7th foot leaves about 83% clean, above the 80% gate.
+    expect(hrvFromFeet(feet.filter((_, i) => i % 7 !== 6)).kind).toBe("estimate");
+  });
+
   it("withholds when fewer than 40 clean intervals remain", () => {
     const { feet } = rsaWave({ bpm: 70, rsa: 0.08, breathHz: 0.1, seconds: 30 });
     expect(hrvFromFeet(feet).kind).toBe("withheld");
