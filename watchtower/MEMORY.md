@@ -12,3 +12,5 @@
 - 2026-10-22: A headless Chrome fake camera (`--use-fake-device-for-media-stream`) shows no face. It can check the scan overlay and the label, but a scan never finishes and a face can never be lost. Plan any result-view or face-lost check as a human check with a real face.
 - 2026-10-22: The fake camera shows a green test card with a spinning pie and a timer. Say so when you share a screenshot from it, or the owner reads it as the real UI.
 - 2026-10-22: Show visual work in Claude Design first, then build it. A spec written before the design (TASK-001) needed a full rewrite after the owner saw the animation.
+- 2026-10-22: GitNexus has no index for this repo, so builders fall back to `rg` for impact checks. Two builders reported this.
+- 2026-10-22: The shared `.vitest/json/output.json` report can be overwritten by a parallel vitest run. Use `--reporter=json --outputFile=<private path>` for test counts.

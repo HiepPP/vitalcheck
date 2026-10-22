@@ -4,7 +4,7 @@
 
 - Title: HRV and breathing rate under the pacer
 - Slug: 20261022-hrv-and-breathing-rate
-- Status: ACTIVE
+- Status: DONE
 - Updated: 2026-10-22
 
 ## Tracker
@@ -12,8 +12,8 @@
 | Order | TASK | Group | Status | Spec | Deps | Context | Notes |
 |-------|------|-------|--------|------|------|---------|-------|
 | 1 | TASK-002 HRV and breathing logic | A | DONE | [watchtower/tasks/TASK-002-hrv-breathing-logic.md](watchtower/tasks/TASK-002-hrv-breathing-logic.md) | - | [watchtower/CONTEXT.md](watchtower/CONTEXT.md) | Pure logic and tests. |
-| 2 | TASK-003 HRV panel in the result view | B | IN PROGRESS | [watchtower/tasks/TASK-003-hrv-result-panel.md](watchtower/tasks/TASK-003-hrv-result-panel.md) | TASK-002 | [watchtower/CONTEXT.md](watchtower/CONTEXT.md) | Depends on TASK-002. |
-| 3 | TASK-004 Document HRV and breathing | C | IN PROGRESS | [watchtower/tasks/TASK-004-hrv-readme.md](watchtower/tasks/TASK-004-hrv-readme.md) | TASK-002 | [watchtower/CONTEXT.md](watchtower/CONTEXT.md) | Depends on TASK-002. Runs beside TASK-003. |
+| 2 | TASK-003 HRV panel in the result view | B | DONE | [watchtower/tasks/TASK-003-hrv-result-panel.md](watchtower/tasks/TASK-003-hrv-result-panel.md) | TASK-002 | [watchtower/CONTEXT.md](watchtower/CONTEXT.md) | Depends on TASK-002. implement: manual checks pending (Q-003). |
+| 3 | TASK-004 Document HRV and breathing | C | DONE | [watchtower/tasks/TASK-004-hrv-readme.md](watchtower/tasks/TASK-004-hrv-readme.md) | TASK-002 | [watchtower/CONTEXT.md](watchtower/CONTEXT.md) | Depends on TASK-002. Runs beside TASK-003. |
 
 TASK Status labels: TODO, IN PROGRESS, BLOCKED, DONE.
 
@@ -34,7 +34,7 @@ TASK Status labels: TODO, IN PROGRESS, BLOCKED, DONE.
 
 ## Handoff
 
-- Next action: run `watchtower implement`.
+- Next action: Hiep runs the four real-face checks of TASK-003 (Q-003), then reviews and merges `feat/hrv-and-breathing-rate`.
 
 ## Archive
 
