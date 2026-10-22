@@ -34,14 +34,14 @@
           <video id="video" autoplay muted playsinline></video>
           <canvas id="overlay"></canvas>
           <div class="hud"><span class="rec"><span class="dot"></span>Live</span></div>
-          <div id="breath" class="breath">Breathe in</div>
+          <div class="breath"><span class="dot"></span><span id="breath">Breathe in · 4</span></div>
           <span class="br tl"></span><span class="br tr"></span><span class="br bl"></span><span class="br brr"></span>
         </div>
         <div class="read">
           <span id="live-bpm" class="bpm">--</span>
-          <span class="u">BPM / live</span>
+          <span class="u"><span id="beat" class="beat"></span>BPM / live</span>
         </div>
-        <div id="wave" class="wave" aria-hidden="true"></div>
+        <canvas id="trace" class="trace" aria-hidden="true"></canvas>
         <div id="ticks" class="ticks" aria-hidden="true"></div>
         <div class="bar status"><span id="status"></span><span id="remaining"></span></div>
         <pre id="debug" hidden></pre>

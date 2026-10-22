@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BREATH_IN_S, BREATH_OUT_S, breathAt } from "./breath";
+import { BREATH_IN_S, BREATH_OUT_S, breathAt, breathRemaining } from "./breath";
 
 describe("breathAt", () => {
   it("paces a 4 s inhale and a 6 s exhale", () => {
@@ -51,5 +51,26 @@ describe("breathAt", () => {
     for (const t of [-1, Number.NaN, Number.POSITIVE_INFINITY]) {
       expect(breathAt(t)).toEqual({ phase: "in", level: 0 });
     }
+  });
+
+  it("keeps moving at the start of each phase", () => {
+    // The first half second of a phase covers a visible share of the swing.
+    expect(breathAt(0.5).level).toBeGreaterThan(0.1);
+    expect(1 - breathAt(BREATH_IN_S + 0.5).level).toBeGreaterThan(0.06);
+  });
+});
+
+describe("breathRemaining", () => {
+  it("counts down whole seconds in each phase", () => {
+    expect(breathRemaining(0)).toBe(4);
+    expect(breathRemaining(3.2)).toBe(1);
+    expect(breathRemaining(BREATH_IN_S)).toBe(6);
+    expect(breathRemaining(9.5)).toBe(1);
+    expect(breathRemaining(10)).toBe(4);
+  });
+
+  it("treats negative or non-finite time as the cycle start", () => {
+    expect(breathRemaining(-1)).toBe(4);
+    expect(breathRemaining(Number.NaN)).toBe(4);
   });
 });
