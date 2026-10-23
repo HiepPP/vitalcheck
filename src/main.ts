@@ -4,6 +4,7 @@ import { loadLandmarker, onVideoFrame, openCamera, stopCamera, type CameraError 
 import { FaceSampler, type Rect } from "./sampler";
 import { estimateBloodPressure, type BpFeatures } from "./bp";
 import { breathAt, breathRemaining } from "./breath";
+import { estimateHrv, PACED_BREATHS_PER_MIN } from "./hrv";
 import { clearCalibration, loadCalibration, makeCalibration, saveCalibration } from "./calibration";
 
 const MEASURE_S = 60;
@@ -360,6 +361,24 @@ function showResult(r: PulseResult) {
   lastResult = r;
   closeCalibrationForm();
   renderBloodPressure();
+  renderHrv(r);
+}
+
+/** Sets every HRV field on each call, so "Measure again" never shows the last scan. */
+function renderHrv(r: PulseResult) {
+  const hrv = estimateHrv(r);
+  const ok = hrv.kind === "estimate";
+  const guide = `${PACED_BREATHS_PER_MIN}/min guide`;
+  $("hrv").textContent = ok ? String(Math.round(hrv.rmssdMs)) : "-";
+  $("hrv-unit").hidden = !ok;
+  $("hrv-note").textContent = ok ? `SDNN ${Math.round(hrv.sdnnMs)} ms · ${hrv.beats} beats` : hrv.reason;
+  $("hrv-breath").hidden = !ok;
+  $("hrv-breath").textContent = ok
+    ? hrv.pacerFollowed
+      ? `Breathing ${hrv.breathsPerMin?.toFixed(1) ?? "-"}/min, matched the ${guide}.`
+      : `Breathing ${hrv.breathsPerMin?.toFixed(1) ?? "-"}/min, did not match the ${guide}. HRV may differ from a guided scan.`
+    : "";
+  $("hrv-basis").textContent = `Measured during guided breathing at ${PACED_BREATHS_PER_MIN} breaths per minute. Slow breathing raises HRV, so do not compare it with resting values. Not validated; do not use it for medical decisions.`;
 }
 
 let lastResult: PulseResult | null = null;
