@@ -4,8 +4,8 @@
 
 - Title: HRV and breathing rate under the pacer
 - Slug: 20261022-hrv-and-breathing-rate
-- Status: DONE
-- Updated: 2026-10-22
+- Status: ARCHIVED
+- Updated: 2026-10-23
 
 ## Tracker
 
@@ -39,3 +39,4 @@ TASK Status labels: TODO, IN PROGRESS, BLOCKED, DONE.
 ## Archive
 
 - [watchtower/archive/20261022-breathing-pacer-oval/NEXT.md](watchtower/archive/20261022-breathing-pacer-oval/NEXT.md)
+- Archived: 2026-10-23 -> watchtower/archive/20261022-hrv-and-breathing-rate/
